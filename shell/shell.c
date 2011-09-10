@@ -32,25 +32,19 @@ int main(int argc, char *argv[])
 			break;
 	}
 
-	for (i = 0; i <= MAX_ARGS; i++) {
-		if (args[i] == NULL)
-			break;
-		printf("%s\n", args[i]);
-	}
-
 	pid = fork();
 	if (pid < 0) {
 		fprintf(stderr, "fork failed\n");
 		return EXIT_FAILURE;
 	} else if (pid == 0) {
-		printf("This is the child process %d\n", pid);
-		execlp(args[0], args[0], args[1], args[2], NULL);
+	/*	printf("This is the child process %d\n", pid);*/
+		execvp(args[0], args);
 
 		/*
 		 * If execution reaches this point, the
 		 * exec system call has failed
 		 */
-		fprintf(stderr, "exec failed\n");
+		fprintf(stderr, "sh: could not find %s\n", args[0]);
 		exit(1);
 	} else {
 		int rVal;
