@@ -6,16 +6,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <errno.h>
+#include "shell.h"
 
 #define MAX_ARGS 32
-
-void setup(void);
-void cleanup(void);
-int cd(char *path);
-int pushd(char *path);
-int popd(void);
-void dirs(void);
-void chuck(char *symbol, char *dir);
 
 int main(int argc, char *argv[])
 {
@@ -63,7 +56,7 @@ int main(int argc, char *argv[])
 			dirs();
 			continue;
 		} else if (strcmp(args[0], "path") == 0) {
-			chuck(args[1], args[2]);
+			pathmanager(args[1], args[2]);
 			continue;
 		}
 
@@ -76,9 +69,9 @@ int main(int argc, char *argv[])
 			execvp(args[0], args);
 
 			/*
-		 	 * If execution reaches this point, the
-		 	 * exec system call has failed
-		 	 */
+			 * If execution reaches this point, the
+			 * exec system call has failed
+			 */
 			fprintf(stderr, "sh: unknown command: %s\n", args[0]);
 			exit(1);
 		} else {
@@ -117,10 +110,9 @@ void setup(void)
 	 * the implicit environment variables argument used by exec
 	 */
 	env = environ;
-	while(*env != NULL) {
-		if (strncmp(*env, "PATH", 4) == 0) {
+	while (*env != NULL) {
+		if (strncmp(*env, "PATH", 4) == 0)
 			*env = path;
-		}
 		env++;
 	}
 
@@ -148,7 +140,7 @@ int cd(char *path)
 	status = chdir(path); /* make a system call */
 	if (status != 0) {
 		fprintf(stderr, "sh: could not change directory\n");
-		switch(errno) {
+		switch (errno) {
 		case EACCES:
 			fprintf(stderr, "\tPermission denied\n");
 			break;
@@ -178,9 +170,9 @@ int cd(char *path)
 		}
 	}
 
-	if ((pwd = getcwd(NULL, MAX_PATH_LENGTH)) == NULL) {
+	pwd = getcwd(NULL, MAX_PATH_LENGTH);
+	if (pwd == NULL)
 		fprintf(stderr, "sh: can't get current directory\n");
-	}
 
 	return status;
 }
@@ -220,14 +212,19 @@ void dirs(void)
 /*
  * chuck - just until I can rename the path handler
  */
-void chuck(char *symbol, char *dir)
+void pathmanager(char *symbol, char *dir)
 {
 	if (symbol == NULL) {
-		printf("%s\n", path + 5);
+		printf("%s\n", path + 5); /* trim off 'PATH=' */
 	} else if (*symbol == '+' && strlen(symbol) == 1) {
-		
+		if (dir != NULL) {
+			int length;
+			length = strlen(path) + strlen(dir) + 2;
+			path = (char *) realloc(path, length);
+			sprintf(path, "%s:%s", path, dir);
+		}
 	} else if (*symbol == '-' && strlen(symbol) == 1) {
-		
+
 	} else {
 
 	}

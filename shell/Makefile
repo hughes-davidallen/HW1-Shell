@@ -19,10 +19,3 @@ clean:
 	rm -f *.o
 
 .PHONY: clean
-
-stack_test: stack_test.o stack.o
-	$(CC) $(CFLAGS) -o stack_test stack_test.o stack.o
-stack_test.o: stack_test.c stack.h
-	$(CC) $(CFLAGS) -c stack_test.c
-stack.o: stack.c stack.h
-	$(CC) $(CFLAGS) -c stack.c
