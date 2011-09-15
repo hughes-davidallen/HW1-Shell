@@ -7,13 +7,17 @@
 #include <unistd.h>
 #include <errno.h>
 #include "shell.h"
+#include "list.h"
 
 #define MAX_ARGS 32
+
+const char *msg = "sh:"; /* Prefix to all messages given by shell */
+const char *prompt = "sh>"; /* displays when shell is ready */
+struct list *path; /* linked list of search paths */
 
 int main(int argc, char *argv[])
 {
 	pid_t pid; /* will be result of the fork() system call */
-	const char *prompt = "sh>"; /* displays when shell is ready */
 	const char *delim = " \t\n"; /* delimeters for argument parsing */
 	char *line; /* location for entire input line */
 	char *args[MAX_ARGS + 1]; /* individual arguments */
@@ -22,7 +26,7 @@ int main(int argc, char *argv[])
 
 	memset(args, 0, sizeof(args));
 
-	printf("Starting Simple Shell %s\n", argv[0]);
+	printf("%s starting %s\n", msg, argv[0]);
 	setup(); /* set up the environment */
 
 	while (1) { /* keep prompting until user 'exit's */
@@ -30,7 +34,10 @@ int main(int argc, char *argv[])
 
 		getline(&line, &len, stdin); /* read all input at once */
 
-		/* put all individual words into an array */
+		/*
+		 * put all individual words into an array. this also makes
+		 * sure the list of args is null-terminated.
+		 */
 		args[0] = strtok(line, delim);
 		for (i = 1; i <= MAX_ARGS; i++) {
 			args[i] = strtok(NULL, delim);
@@ -38,10 +45,10 @@ int main(int argc, char *argv[])
 				break;
 		}
 
-		/* Handle built-in commands without forking */
+		/* handle built-in commands without forking */
 		if (strcmp(args[0], "exit") == 0) {
 			free(line);
-			printf("sh: Goodbye\n\n");
+			printf("%s goodbye\n", msg);
 			break;
 		} else if (strcmp(args[0], "cd") == 0) {
 			cd(args[1]);
@@ -63,16 +70,34 @@ int main(int argc, char *argv[])
 		/* handle non built-ins by forking a new process */
 		pid = fork();
 		if (pid < 0) {
-			fprintf(stderr, "sh: fork failed\n");
+			fprintf(stderr, "%s fork failed\n", msg);
 			return EXIT_FAILURE;
 		} else if (pid == 0) {
-			execvp(args[0], args);
+			char *loc;
+			struct link *cursor;
+
+			cursor = path->head;
+			while (cursor != NULL) {
+
+				loc = (char *) malloc(strlen(cursor->data)
+						+ strlen(args[0]) + 2);
+				loc = strcat(loc, cursor->data);
+				loc = strcat(loc, "/");
+				loc = strcat(loc, args[0]);
+
+				printf("attempting to execute %s at location %s\n", args[0], loc);
+
+				execv(loc, args);
+				free(loc);
+				cursor = cursor->next;
+			}
 
 			/*
 			 * If execution reaches this point, the
 			 * exec system call has failed
 			 */
-			fprintf(stderr, "sh: unknown command: %s\n", args[0]);
+			fprintf(stderr, "%s unknown command: %s\n",
+							msg, args[0]);
 			exit(1);
 		} else {
 			int rVal;
@@ -94,8 +119,7 @@ int main(int argc, char *argv[])
 
 #define MAX_PATH_LENGTH 100
 
-struct stack *stack; /* used to store old directory locations */
-char *path = "PATH=";
+struct stack *dirstack; /* used to store old directory locations */
 char *pwd;
 
 /*
@@ -103,22 +127,13 @@ char *pwd;
  */
 void setup(void)
 {
-	char **env; /* used to help clobber the PATH variable */
+	path = list_init();
 
-	/*
-	 * Clobber the old PATH environment variable.  environ represents
-	 * the implicit environment variables argument used by exec
-	 */
-	env = environ;
-	while (*env != NULL) {
-		if (strncmp(*env, "PATH", 4) == 0)
-			*env = path;
-		env++;
-	}
-
-	stack = stack_init();
+	dirstack = stack_init();
 
 	pwd = getcwd(NULL, MAX_PATH_LENGTH);
+	if (pwd == NULL)
+		fprintf(stderr, "%s can't get current directory\n", msg);
 }
 
 /*
@@ -126,7 +141,8 @@ void setup(void)
  */
 void cleanup(void)
 {
-	stack_free(stack);
+	list_free(path);
+	stack_free(dirstack);
 	free(pwd);
 }
 
@@ -139,7 +155,7 @@ int cd(char *path)
 	int status;
 	status = chdir(path); /* make a system call */
 	if (status != 0) {
-		fprintf(stderr, "sh: could not change directory\n");
+		fprintf(stderr, "%s could not change directory\n", msg);
 		switch (errno) {
 		case EACCES:
 			fprintf(stderr, "\tPermission denied\n");
@@ -172,7 +188,7 @@ int cd(char *path)
 
 	pwd = getcwd(NULL, MAX_PATH_LENGTH);
 	if (pwd == NULL)
-		fprintf(stderr, "sh: can't get current directory\n");
+		fprintf(stderr, "%s can't get current directory\n", msg);
 
 	return status;
 }
@@ -182,8 +198,15 @@ int cd(char *path)
  */
 int pushd(char *path)
 {
-	push(stack, pwd);
-	return cd(path);
+	int status;
+	char *old_dir;
+
+	old_dir = pwd;
+	status = cd(path);
+	if (status == 0)
+		push(dirstack, old_dir);
+
+	return status;
 }
 
 /*
@@ -191,14 +214,14 @@ int pushd(char *path)
  */
 int popd(void)
 {
-	if (stack->top == NULL) {
-		fprintf(stderr, "sh: Directory stack is empty\n");
+	if (dirstack->top == NULL) {
+		fprintf(stderr, "%s Directory stack is empty\n", msg);
 		return -1;
 	}
 
-	printf("%s\n", peek(stack));
+	printf("%s\n", peek(dirstack));
 
-	return cd(pop(stack));
+	return cd(pop(dirstack));
 }
 
 /*
@@ -206,26 +229,33 @@ int popd(void)
  */
 void dirs(void)
 {
-	stack_print(stack);
+	stack_print(dirstack);
 }
 
 /*
- * chuck - just until I can rename the path handler
+ * pathmanager
  */
 void pathmanager(char *symbol, char *dir)
 {
 	if (symbol == NULL) {
-		printf("%s\n", path + 5); /* trim off 'PATH=' */
-	} else if (*symbol == '+' && strlen(symbol) == 1) {
-		if (dir != NULL) {
-			int length;
-			length = strlen(path) + strlen(dir) + 2;
-			path = (char *) realloc(path, length);
-			sprintf(path, "%s:%s", path, dir);
+		struct link *cursor;
+
+		cursor = path->head;
+		while (cursor != NULL) {
+			printf("%s", cursor->data);
+			cursor = cursor->next;
+
+			if (cursor != NULL)
+				printf(":");
+			else
+				printf("\n");
 		}
-	} else if (*symbol == '-' && strlen(symbol) == 1) {
-
+	} else if (*symbol == '+' && strlen(symbol) == 1 && dir != NULL) {
+		list_add(path, dir);
+	} else if (*symbol == '-' && strlen(symbol) == 1 && dir != NULL) {
+		list_remove(path, dir);
 	} else {
-
+		fprintf(stderr, "%s improper usage of path\n"
+				"\tpath [+|- /some/dir]\n", msg);
 	}
 }
