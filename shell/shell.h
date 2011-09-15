@@ -8,5 +8,6 @@ int pushd(char *path);
 int popd(void);
 void dirs(void);
 void pathmanager(char *symbol, char *path);
+void execute(char *args[]);
 
 #endif

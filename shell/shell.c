@@ -13,7 +13,6 @@
 
 const char *msg = "sh:"; /* Prefix to all messages given by shell */
 const char *prompt = "sh>"; /* displays when shell is ready */
-struct list *path; /* linked list of search paths */
 
 int main(int argc, char *argv[])
 {
@@ -73,24 +72,7 @@ int main(int argc, char *argv[])
 			fprintf(stderr, "%s fork failed\n", msg);
 			return EXIT_FAILURE;
 		} else if (pid == 0) {
-			char *loc;
-			struct link *cursor;
-
-			cursor = path->head;
-			while (cursor != NULL) {
-
-				loc = (char *) malloc(strlen(cursor->data)
-						+ strlen(args[0]) + 2);
-				loc = strcat(loc, cursor->data);
-				loc = strcat(loc, "/");
-				loc = strcat(loc, args[0]);
-
-				printf("attempting to execute %s at location %s\n", args[0], loc);
-
-				execv(loc, args);
-				free(loc);
-				cursor = cursor->next;
-			}
+			execute(args);
 
 			/*
 			 * If execution reaches this point, the
@@ -119,6 +101,7 @@ int main(int argc, char *argv[])
 
 #define MAX_PATH_LENGTH 100
 
+struct list *path; /* linked list of search paths */
 struct stack *dirstack; /* used to store old directory locations */
 char *pwd;
 
@@ -257,5 +240,29 @@ void pathmanager(char *symbol, char *dir)
 	} else {
 		fprintf(stderr, "%s improper usage of path\n"
 				"\tpath [+|- /some/dir]\n", msg);
+	}
+}
+
+/*
+ * execute
+ */
+void execute(char *args[])
+{
+	char *loc;
+	struct link *cursor;
+
+	cursor = path->head;
+	while (cursor != NULL) {
+		loc = (char *) malloc(strlen(cursor->data)
+						+ strlen(args[0]) + 2);
+		loc = strcat(loc, cursor->data);
+		loc = strcat(loc, "/");
+		loc = strcat(loc, args[0]);
+
+		printf("attempting to execute %s at location %s\n", args[0], loc);
+
+		execv(loc, args);
+		free(loc);
+		cursor = cursor->next;
 	}
 }
