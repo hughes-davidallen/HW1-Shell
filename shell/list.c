@@ -73,10 +73,12 @@ int list_remove(struct list *l, char *word)
 		return 0;
 	} else if (prev == NULL) { /* word is first item in list */
 		l->head = cursor->next;
+		if (cursor->next == NULL) /* word is only item in list */
+			l->tail = NULL;
 	} else if (cursor->next == NULL) { /*word is last item in list */
 		l->tail = prev;
 		prev->next = NULL;
-	} else { /* word is found but not front of list */
+	} else { /* word is found at middle of list */
 		prev->next = cursor->next;
 	}
 
