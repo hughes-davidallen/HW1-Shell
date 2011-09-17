@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
 
 	printf("%s starting %s\n", msg, argv[0]);
 	setup(); /* set up the environment */
-	printf("line: %p\n", line);
 
 	while (1) { /* keep prompting until user 'exit's */
 		printf("%s", prompt);
@@ -48,6 +47,7 @@ int main(int argc, char *argv[])
 		/* handle built-in commands without forking */
 		if (args[0] == NULL) {
 			/* do nothing */
+			continue;
 		} else if (strcmp(args[0], "exit") == 0) {
 			free(line);
 			printf("%s goodbye\n", msg);
@@ -162,13 +162,14 @@ int cd(char *path)
 			fprintf(stderr, "\tPath name too long\n");
 			break;
 		case ENOENT:
-			fprintf(stderr, "\tDirectory does not exist\n");
+			fprintf(stderr, "\tDirectory %s does not exist\n",
+								path);
 			break;
 		case ENOMEM:
 			fprintf(stderr, "\tInsufficient kernal memory\n");
 			break;
 		case ENOTDIR:
-			fprintf(stderr, "\tNot a directory\n");
+			fprintf(stderr, "\t%s is not a directory\n", path);
 			break;
 		default:
 			break;
@@ -207,12 +208,20 @@ int pushd(char *path)
  */
 int popd(void)
 {
+	int status;
+	char *new_dir;
+
 	if (dirstack->top == NULL) {
-		fprintf(stderr, "%s Directory stack is empty\n", msg);
+		fprintf(stderr, "%s Directory stack is empty\n", ermsg);
 		return -1;
 	}
 
-	return cd(pop(dirstack));
+	new_dir = peek(dirstack);
+	status = cd(new_dir);
+	if (status == 0)
+		free(pop(dirstack));
+
+	return status;
 }
 
 /*

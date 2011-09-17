@@ -3,9 +3,6 @@
 #include <string.h>
 #include "stack.h"
 
-struct stack_item *stack_item_init(char *word);
-struct stack_item *stack_item_free(struct stack_item *item);
-
 struct stack *stack_init(void)
 {
 	struct stack *s = (struct stack *) malloc(sizeof(struct stack));
@@ -15,10 +12,8 @@ struct stack *stack_init(void)
 
 void stack_free(struct stack *s)
 {
-	while (s->top != NULL) {
-		free(s->top->data);
-		pop(s);
-	}
+	while (s->top != NULL)
+		free(pop(s));
 	free(s);
 }
 
@@ -31,14 +26,29 @@ void push(struct stack *s, char *word)
 
 char *pop(struct stack *s)
 {
-	char *word = s->top->data;
-	s->top = stack_item_free(s->top);
-	return word;
+	if (s->top != NULL) {
+		char *word;
+		struct stack_item *old_top;
+
+		word = strdup(s->top->data);
+		old_top = s->top;
+		s->top = s->top->next;
+		stack_item_free(old_top);
+
+		return word;
+	}
+
+	/* the stack is empty */
+	return NULL;
 }
 
 char *peek(struct stack *s)
 {
-	return s->top->data;
+	if (s->top != NULL)
+		return s->top->data;
+
+	/* the stack is empty */
+	return NULL;
 }
 
 void stack_print(struct stack *s)
@@ -58,9 +68,8 @@ struct stack_item *stack_item_init(char *word)
 	return new_item;
 }
 
-struct stack_item *stack_item_free(struct stack_item *item)
+void stack_item_free(struct stack_item *item)
 {
-	struct stack_item *next = item->next;
+	free(item->data);
 	free(item);
-	return next;
 }

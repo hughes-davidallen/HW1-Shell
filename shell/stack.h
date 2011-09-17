@@ -24,4 +24,7 @@ char *peek(struct stack *s);
 
 void stack_print(struct stack *s);
 
+struct stack_item *stack_item_init(char *word);
+void stack_item_free(struct stack_item *item);
+
 #endif
