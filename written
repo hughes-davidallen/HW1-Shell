@@ -1,0 +1,58 @@
+	David Hughes - dah2117 - Operating Systems Homework 1
+
+1.  Exercise 1.8:
+	a.  Setting the value of a timer should be privileged.
+	b.  
+	c.
+	d.
+	e.  Turning off interrupts should be privileged.
+	f.
+	g.  Switching from user mode to kernal mode should be privileged.
+	h.
+
+2.  Exercise 2.13:
+	1.  Message queue
+	2.  system call
+	3.  Shared memory
+
+3.  Exercise 2.21:
+	The main advantage of the microkernal approach to system design is
+	increased security.  Only a minimal set of functionality runs in
+	kernal mode (privileged).  This means that the number of processes
+	with access to the hardware is smaller.  A smaller amount of code
+	running in kernal mode means there will be fewer bugs in kernal
+	mode.**********************************************
+
+	User programs and system services communicate with each other through
+	message passing facilitated by the microkernal.  They never interact
+	directly.
+
+	The main disadvantage of the microkernal approach is performance.
+	Many system programs that would run in kernal mode in a monolithic
+	operating system run in user mode in a microkernal operating system.
+	Those system programs then have to communicate with the kernal
+	through message passing rather than directly, which is slower.
+
+4.  Exercise 2.25:
+	************************************************
+	The host operating system must be able to do everything that the
+	guest operating system can do, meaning that the guest operating
+	system can't expect privileges that the host operating system is
+	unable to deliver.
+
+5.  Exercise 2.26:
+	
+
+6.	No, a bug in a child process created by calling fork cannot damage
+	the parent process.  The child process will have its own address
+	space, and the operating system takes great care to ensure that
+	no process can access another processes' memory space.
+
+7.  
+
+8.	The operating systems presents an interface between the hardware
+	and the user.  Windowing systems are an integral part of the user
+	experience in many cases, and should therefore be considered part
+	of the operating system.  In addition, the operating system is
+	responsible for allocating resources, including I/O resources such
+	as the monitor.

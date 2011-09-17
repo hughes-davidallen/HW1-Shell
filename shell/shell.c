@@ -92,11 +92,11 @@ int main(int argc, char *argv[])
 	}
 	cleanup();
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 /*
- * From here until the end of the file represents the guts of the shell.
+ * From here until the end of the file represents the internals of the shell.
  * This is where all of the built-in commands are handled.
  */
 
