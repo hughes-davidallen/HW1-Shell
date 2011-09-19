@@ -18,7 +18,7 @@ struct stack {
 struct stack *stack_init(void);
 void stack_free(struct stack *s);
 
-void push(struct stack *s, char *word);
+int push(struct stack *s, char *word);
 char *pop(struct stack *s);
 char *peek(struct stack *s);
 

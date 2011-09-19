@@ -11,8 +11,10 @@ struct list *list_init(void)
 	struct list *l;
 
 	l = (struct list *) malloc(sizeof(struct list));
-	l->head = NULL;
-	l->tail = NULL;
+	if (l != NULL) {
+		l->head = NULL;
+		l->tail = NULL;
+	}
 	return l;
 }
 
@@ -20,24 +22,30 @@ struct list *list_init(void)
 void list_free(struct list *l)
 {
 	struct link *cursor;
-	struct link *old_cursor;
+	struct link *prev;
 
 	cursor = l->head;
 	while (cursor != NULL) {
 		free(cursor->data);
-		old_cursor = cursor;
+		prev = cursor;
 		cursor = cursor->next;
-		free(old_cursor);
+		free(prev);
 	}
 	free(l);
 }
 
-/* copy a word and append it to the end of the list */
-void list_add(struct list *l, char *word)
+/*
+ * copy a word and append it to the end of the list
+ * returns 1 on success and 0 on failure
+ */
+int list_add(struct list *l, char *word)
 {
 	struct link *lin;
 
 	lin = (struct link *) malloc(sizeof(struct link));
+	if (lin == NULL)
+		return 0;
+
 	lin->next = NULL;
 	lin->data = strdup(word);
 
@@ -48,6 +56,8 @@ void list_add(struct list *l, char *word)
 		l->tail->next = lin;
 		l->tail = lin;
 	}
+
+	return 1;
 }
 
 /*

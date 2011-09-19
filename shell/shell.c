@@ -109,17 +109,32 @@ char *pwd;
 
 /*
  * setup - initializes data structures used to keep track of the path
- * and directory stack
+ * and directory stack.  If memory requests for these data stuctures fail,
+ * the program will exit.
  */
 void setup(void)
 {
 	path = list_init();
+	if (path == NULL) {
+		fprintf(stderr, "%s can't initialize path list\n", ermsg);
+		exit(-1);
+	}
 
 	dirstack = stack_init();
+	if (dirstack == NULL) {
+		fprintf(stderr, "%s can't initialize directory stack\n",
+								ermsg);
+		list_free(path);
+		exit(-1);
+	}
 
 	pwd = getcwd(NULL, 0);
-	if (pwd == NULL)
-		fprintf(stderr, "%s can't get current directory\n", msg);
+	if (pwd == NULL) {
+		fprintf(stderr, "%s can't get current directory\n", ermsg);
+		list_free(path);
+		stack_free(dirstack);
+		exit(-1);
+	}
 }
 
 /*
@@ -189,12 +204,18 @@ int cd(char *path)
 int pushd(char *path)
 {
 	int status;
+	int result;
 	char *old_dir;
 
 	old_dir = strdup(pwd);
 	status = cd(path);
-	if (status == 0)
-		push(dirstack, old_dir);
+	if (status == 0) {
+		result = push(dirstack, old_dir);
+		if (result == 0) {
+			fprintf(stderr, "%s could not push %s onto the "
+					"directory stack\n", ermsg, path);
+		}
+	}
 	free(old_dir);
 
 	return status;
@@ -253,7 +274,12 @@ void pathmanager(char *symbol, char *dir)
 				printf("\n");
 		}
 	} else if (*symbol == '+' && strlen(symbol) == 1 && dir != NULL) {
-		list_add(path, dir);
+		int result;
+		result = list_add(path, dir);
+		if (result == 0) {
+			fprintf(stderr, "%s could not add %s to path\n",
+								ermsg, dir);
+		}
 	} else if (*symbol == '-' && strlen(symbol) == 1 && dir != NULL) {
 		list_remove(path, dir);
 	} else {

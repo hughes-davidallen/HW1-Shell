@@ -13,7 +13,7 @@ struct list {
 
 struct list *list_init(void);
 void list_free(struct list *l);
-void list_add(struct list *l, char *word);
+int list_add(struct list *l, char *word);
 int list_remove(struct list *l, char *word);
 void list_print(struct list *l);
 
