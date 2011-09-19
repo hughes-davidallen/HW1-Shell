@@ -1,19 +1,45 @@
 	David Hughes - dah2117 - Operating Systems Homework 1
 
 1.  Exercise 1.8:
-	a.  Setting the value of a timer should be privileged.
-	b.  
-	c.
-	d.
-	e.  Turning off interrupts should be privileged.
-	f.
-	g.  Switching from user mode to kernal mode should be privileged.
-	h.
+	a.  Setting the value of a timer should be privileged because the OS
+		is responsible for scheduling processes on the CPU and should
+		have the ability to decide how long each process should run.
+	b.  Modifying the clock would need to be privileged, but reading
+		should not have to be.
+	c.  Clearing memory does not need to be privileged because the OS
+		should grant each process autonomy over its own address
+		space.  This assumes the memory to be cleared is in the
+		process' address space.
+	d.  Trap instructions must be privileged or else they wouldn't be
+		trapped to the OS.
+	e.  Turning off interrupts should be privileged because otherwise
+		any process could turn off the timer and then eat up all of
+		the CPU cycles in an infinite loop.
+	f.  Modifying the device-status table should be privileged because
+		the OS is responsible for usage of and interaction with all
+		devices.
+	g.  Switching from user mode to kernal mode should be privileged
+		because otherwise any process could arbitrarily switch into
+		kernel mode at any time, which defeats teh purpose of kernel
+		mode.
+	h.  Accessing I/O devices should not be privileged because the OS
+		is repsonsible for making sure all processes use the I/O
+		devices properly and no process should be able to touch
+		physical devices without the OS' permission.
 
 2.  Exercise 2.13:
-	1.  Message queue
-	2.  system call
-	3.  Shared memory
+	1.  The parameters can be loaded into registers.  This makes them
+		immediately available for use in the CPU, but may limit the
+		number and size of parameters that are allowed.
+	2.  The parameters may be stored as a block in memory, and then the
+		address of the block is loaded into a register.  This
+		approach allows for an arbitrary number of arbitrarily sized
+		parameters, but will be a little slower than putting all of
+		the parameters in registers.
+	3.  The parameters may be pushed onto the execution stack.  Again,
+		this approach allows for a large number of large parameters,
+		but will be slower than loading the parameters in registers
+		because it involves main memory.
 
 3.  Exercise 2.21:
 	The main advantage of the microkernal approach to system design is
@@ -75,17 +101,44 @@
 	no process can access another processes' memory space without
 	express permission.
 
-7.	First of all, there is no error checking.  Also, lseek is a system
-	call, so there is a lot of overhead for calling it on every char in
-	the file.  A better approach would be to use a single system call to
-	load the entire file into memory and then read it backwards from
-	there.  Or, if the file is too large for that to be feasible, it
-	could be broken into appropriately sized chunks but still read in at
-	a much higher rate than one character at a time.
+7.	First of all, this is not a good technique because there is no error
+	checking, but we will ignore that for now.  Second, the program
+	listed will go into an infinite loop because the loop is constantly
+	reading the last byte in the file and then reseting fptr right
+	before the last byte of the file.  The last line in the loop body
+	should be:
 
-8.	The operating systems presents an interface between the hardware
-	and the user.  Windowing systems are an integral part of the user
-	experience in many cases, and should therefore be considered part
-	of the operating system.  In addition, the operating system is
-	responsible for allocating resources, including I/O resources such
-	as the monitor.
+	fptr = lseek(fd, (off_t) -2, SEEK_CUR);
+
+	in order to run properly.
+
+	The real problem, though, is that this approach uses 3 system calls
+	(lseek, read, and write) for every single character of the file.
+	This results in significant overhead as the Operating System needs to
+	be involved on every line of code in the loop body.  It would be much
+	better to process the file in larger chunks to decrease the number of
+	system calls required.
+
+8.	At the most basic level, an Operating System is a resource allocator.
+	The computer has a fixed amount of physical resources, and the OS is
+	responsible for giving each process the resources it needs to fulfill
+	its purpose.  The operating system provides useful abstractions so
+	that the user processes don't need to know the specific details of
+	the hardware in order to run.  From this perspective, very little is
+	actually part of the operating system.  Functions such as a web
+	browser or windowing system could easily be implemented as user
+	programs that would then request the resources they needed (ie a 
+	monitor or network connection) from the OS.  The OS itself, though,
+	wouldn't need to know anything about what those requested resources
+	were being used for.
+
+	On the other hand, though, the operating system can be seen as the
+	mediator between the human user and the machine, which means that
+	the user experience is an important consideration in OS design.  A
+	windowing system would then be viewed as an integral part of the OS
+	because it enhances the user experience and makes it easier for the
+	user to interact efficiently with the machine.  The same argument can
+	be made about a web browser because the Operating System exists to
+	allow the human user to do what he or she wants to do more easily,
+	and much of what a human user wants to do involves the world wide
+	web.

@@ -1,4 +1,5 @@
-Running make will produce the executable w4118_sh, which is a shell.
+Running make in the shell directory will produce the executable w4118_sh,
+which is a shell.
 
 w4118_sh uses the fork() system call to create a child process to run each
 of the commands enetered into the shell.  The parent (shell) process will
@@ -29,3 +30,10 @@ path	manages the shells path variable. path with no arguments prints the
 	modification from the shell. This means that '/bin' and '/bin/' are
 	treated as distinct paths, even though they will give the exact same
 	results when used in an execv() system call.
+
+COLLABORATION/REFERENCES:
+I spoke briefly with Sumedh Attarde about the behavior of the path variable.
+I spoke briefly with Moses Nakamura about some memory management issues, but
+without using any specific code examples.
+After noting that the virtual machine I was given only has section 1 of the
+manual, I started using the man pages from linux.die.com/man.
