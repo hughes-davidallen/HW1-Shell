@@ -21,7 +21,13 @@
 	kernal mode (privileged).  This means that the number of processes
 	with access to the hardware is smaller.  A smaller amount of code
 	running in kernal mode means there will be fewer bugs in kernal
-	mode.**********************************************
+	mode.
+
+	Also, microkernal operating systems benefit from modular design.  A
+	simpler kernel is easier to understand, and because adding new
+	functionality to the operating system requires creating a user-mode
+	module, the kernel itself doesn't need to be modified.  This also
+	lends itself to increased security.
 
 	User programs and system services communicate with each other through
 	message passing facilitated by the microkernal.  They never interact
@@ -34,21 +40,48 @@
 	through message passing rather than directly, which is slower.
 
 4.  Exercise 2.25:
-	************************************************
-	The host operating system must be able to do everything that the
-	guest operating system can do, meaning that the guest operating
-	system can't expect privileges that the host operating system is
-	unable to deliver.
+	In a system like VMware, the guest operating system runs as a user
+	process on top of the host operating system. VMware presents an
+	interface that appears to the guest system like a physical machine,
+	but really all resources must be requested from the host system.
+
+	Really the only consideration that must be made in choosing the host
+	operating system is that it must be able to support the VMware
+	application.  The guest operating system instance appears as a file
+	in the files system of the host operating system.  This makes
+	virtualization very simple for the user.
 
 5.  Exercise 2.26:
-	
+	The obvious benefit of the Synthesis approach is performance.
+	Communication between the kernel and any outside process takes time,
+	so moving important functions in the kernel space will make them run
+	faster.  With a layered approach, a processes making a system call
+	may have to go through many different function calls in order to get
+	to the real system call code, but the Synthesis approach cuts out a
+	lot of that overhead.
+
+	On the negative side, incorporating extra functionality into the
+	kernel can cause some problems.  The kernel will be more
+	complicated, meaning it will be more difficult for developers to
+	understand and modify, and any future modifications to the kernel
+	will have to work around a lot more interconnected code.  On a
+	related note, more code int the kernel means that there is a greater
+	chance that bugs will be found in code that runs in privileged mode,
+	meaning a greater chance of system failure.
 
 6.	No, a bug in a child process created by calling fork cannot damage
 	the parent process.  The child process will have its own address
 	space, and the operating system takes great care to ensure that
-	no process can access another processes' memory space.
+	no process can access another processes' memory space without
+	express permission.
 
-7.  
+7.	First of all, there is no error checking.  Also, lseek is a system
+	call, so there is a lot of overhead for calling it on every char in
+	the file.  A better approach would be to use a single system call to
+	load the entire file into memory and then read it backwards from
+	there.  Or, if the file is too large for that to be feasible, it
+	could be broken into appropriately sized chunks but still read in at
+	a much higher rate than one character at a time.
 
 8.	The operating systems presents an interface between the hardware
 	and the user.  Windowing systems are an integral part of the user

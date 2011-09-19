@@ -1,0 +1,31 @@
+Running make will produce the executable w4118_sh, which is a shell.
+
+w4118_sh uses the fork() system call to create a child process to run each
+of the commands enetered into the shell.  The parent (shell) process will
+wait until the child exits. Commands given to the shell may be arbitrarily
+long in terms of the number of characters, but the number of arguments is
+limited to 32.
+
+Several builtin commands (those that are handled inside of the shell without
+calling fork()) have been implemented:
+
+exit	closes the shell.
+cd	change directory. Changes the current directory to the value of its
+	first argument.
+pushd	push directory. Works just like cd, only it also pushes the current
+	directory onto a stack before switchig to the new directory.
+popd	pops the directory off of the top of the directory stack and cds
+	into it. The top directory is the one that pushd placed on the stack
+	most recently.
+dirs	prints the content of the directory stack one per line. The current
+	directory is printed first, followed by the stack contents from most
+	recent to least recent.
+path	manages the shells path variable. path with no arguments prints the
+	current path as a colon-separated list, ie '/usr/bin:/bin'. The path
+	is empty by default. Items are added to the path by commands of the
+	form 'path + /path/to/dir'. Items are removed from the path by
+	commands of the form 'path - /path/to/dir'. Strings given as
+	arguments to the path command are processed as-is with no
+	modification from the shell. This means that '/bin' and '/bin/' are
+	treated as distinct paths, even though they will give the exact same
+	results when used in an execv() system call.
