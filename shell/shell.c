@@ -230,6 +230,7 @@ int popd(void)
  */
 void dirs(void)
 {
+	printf("%s\n", pwd);
 	stack_print(dirstack);
 }
 
