@@ -81,8 +81,6 @@ int main(int argc, char *argv[])
 			 * If execution reaches this point, the
 			 * exec system call has failed
 			 */
-			fprintf(stderr, "%s unknown command: %s\n",
-							ermsg, args[0]);
 			exit(1);
 		} else {
 			int rVal;
@@ -272,6 +270,7 @@ void execute(char *args[])
 {
 	char *loc;
 	struct link *cursor;
+	int tries;
 
 	if (*args[0] == '/' || *args[0] == '.') {
 		/*
@@ -283,20 +282,34 @@ void execute(char *args[])
 	}
 
 	cursor = path->head;
+	tries = 0;
 	while (cursor != NULL) { /* iterate through all paths */
 		int len;
 
 		len = strlen(cursor->data) + strlen(args[0]) + 2;
 		loc = (char *) malloc(len);
-		memset(loc, 0, len);
-		loc = strcat(loc, cursor->data);
-		loc = strcat(loc, "/");
-		loc = strcat(loc, args[0]);
+		if (loc != NULL) {
+			memset(loc, 0, len);
+			loc = strcat(loc, cursor->data);
+			loc = strcat(loc, "/");
+			loc = strcat(loc, args[0]);
 
-		execv(loc, args);
+			execv(loc, args);
 
-		/* execv did not work, try the next path */
-		free(loc);
-		cursor = cursor->next;
+			/* execv did not work, try the next path */
+			free(loc);
+			cursor = cursor->next;
+		} else if (tries++ >= 3) {
+			/*
+			 * malloc has failed
+			 * try three times and then give up
+			 */
+			fprintf(stderr, "%s could not execute command: %s\n",
+							ermsg, args[0]);
+			return;
+		}
 	}
+
+	fprintf(stderr, "%s unknown command: %s\n", ermsg, args[0]);
+	return; /* everthing operated correctly but command wasn't found */
 }
