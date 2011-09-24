@@ -1,0 +1,527 @@
+
+
+
+*****************************************************************
+*********                   Test 1                     *********
+Checking for shell/ source dir, Makefile, style, compilation
+*****************************************************************
+
+Checking for source directory:
+------------------------------
+OK: source directory exists
+
+
+Looking for Makefile:
+---------------------
+OK: Makefile found!
+
+
+Running checkpatch:
+-------------------
+total: 0 errors, 0 warnings, 111 lines checked
+
+/home/w4118/students/dah2117/hmwk1/shell/list.c has no obvious style problems and is ready for submission.
+total: 0 errors, 0 warnings, 341 lines checked
+
+/home/w4118/students/dah2117/hmwk1/shell/shell.c has no obvious style problems and is ready for submission.
+total: 0 errors, 0 warnings, 98 lines checked
+
+/home/w4118/students/dah2117/hmwk1/shell/stack.c has no obvious style problems and is ready for submission.
+
+
+Compiling:
+----------
+	GCC Version:  gcc (Debian 4.3.2-1.1) 4.3.2 Copyright (C) 2008 Free Software Foundation, Inc. This is free software; see the source for copying conditions. There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+	
+make: Entering directory `/home/w4118/students/dah2117/hmwk1/shell'
+gcc -Wall  -c shell.c
+gcc -Wall  -c stack.c
+gcc -Wall  -c list.c
+gcc -Wall   -o w4118_sh shell.o stack.o list.o
+make: Leaving directory `/home/w4118/students/dah2117/hmwk1/shell'
+
+
+
+*****************************************************************
+*********                   Test 2                     *********
+Test 100 input arguments
+*****************************************************************
+
+Input command:
+--------------
+path + /home/w4118/hmwk1-soln
+sum.sh 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 + 16 + 17 + 18 + 19 + 20 + 21 + 22 + 23 + 24 + 25 + 26 + 27 + 28 + 29 + 30 + 31 + 32 + 33 + 34 + 35 + 36 + 37 + 38 + 39 + 40 + 41 + 42 + 43 + 44 + 45 + 46 + 47 + 48 + 49 + 50
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13131 Done                    cat "$CMD_FILE"
+     13132 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 3                     *********
+Input arguments white space handling
+*****************************************************************
+
+Input command:
+--------------
+path + /home/w4118/hmwk1-soln
+sum.sh 1 + 2 + 3 + 4
+sum.sh        1    +    4 +         2     +     3
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13138 Done                    cat "$CMD_FILE"
+     13139 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 4                     *********
+Path empty by default
+*****************************************************************
+
+Input command:
+--------------
+path
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13144 Done                    cat "$CMD_FILE"
+     13146 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 5                     *********
+Removing path from empty path should not fail
+*****************************************************************
+
+Input command:
+--------------
+path - .
+path
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13152 Done                    cat "$CMD_FILE"
+     13153 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 6                     *********
+Add path twice, should remove path twice
+*****************************************************************
+
+Input command:
+--------------
+path + /usr/local/bin
+path + /usr/local/bin
+path - /usr/local/bin
+path - /usr/local/bin
+path
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13159 Done                    cat "$CMD_FILE"
+     13160 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 7                     *********
+Add 10 paths, remove them, path should contain only /etc
+*****************************************************************
+
+Input command:
+--------------
+path + /usr
+path + /usr/bin
+path + /usr/games
+path + /usr/lib
+path + /usr/lib/groff
+path + /usr/lib/groff/site-tmac
+path + /usr/lib/grub-legacy
+path + /usr/lib/i486-linux-gnu
+path + /usr/src
+path + /usr/X11R6
+path + /etc
+path - /usr/X11R6
+path - /usr/src
+path - /usr/lib/i486-linux-gnu
+path - /usr/lib/grub-legacy
+path - /usr/lib/groff/site-tmac
+path - /usr/lib/groff
+path - /usr/lib
+path - /usr/games
+path - /usr/bin
+path - /usr
+path
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13196 Done                    cat "$CMD_FILE"
+     13197 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 8                     *********
+Remove non-existing path - should give error
+*****************************************************************
+
+Input command:
+--------------
+path - /usr/local/bin
+path - /not_existing
+path
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13202 Done                    cat "$CMD_FILE"
+     13203 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 9                     *********
+Test that is searched correctly (not current dir)
+*****************************************************************
+
+This can either output (the specs are unclear):
+    -c uname
+    Linux
+or
+    Linux
+    Linux
+
+
+Input command:
+--------------
+path + /bin
+path + /usr/bin
+path
+ln -f -s /bin/echo /tmp/sh
+cd /tmp
+sh -c uname
+cd /
+sh -c uname
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13210 Done                    cat "$CMD_FILE"
+     13211 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 10                     *********
+Test for bogus arguments
+*****************************************************************
+
+Input command:
+--------------
+cd /etc
+path + /bin
+path / /
+cd /usr /tmp
+pwd
+popd 1
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13217 Done                    cat "$CMD_FILE"
+     13218 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 11                     *********
+Testing 'dirs' command
+*****************************************************************
+
+Expected:
+    /tmp
+    /etc /bin /
+    /usr
+    /tmp
+
+
+Input command:
+--------------
+cd /tmp
+path + /bin
+pwd
+pushd /bin
+pushd /etc
+pushd /usr
+dirs
+popd
+popd
+pwd
+popd
+pwd
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13224 Done                    cat "$CMD_FILE"
+     13225 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 12                     *********
+Test dirs when path doesn't exist
+*****************************************************************
+
+Input command:
+--------------
+pushd /OOPS
+dirs
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13231 Done                    cat "$CMD_FILE"
+     13232 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 13                     *********
+Dirs when directory gets removed (should not crash)
+*****************************************************************
+
+Input command:
+--------------
+path + /bin
+mkdir removed
+cd removed
+rm -r ../removed
+pushd /
+popd
+dirs
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13238 Done                    cat "$CMD_FILE"
+     13239 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 14                     *********
+Dirs with . and .. (should end in /usr/local/bin)
+*****************************************************************
+
+Input command:
+--------------
+path + /bin
+cd /usr/local/bin
+pushd ../../lib
+pushd .
+cd /tmp
+popd
+pwd
+popd
+pwd
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13245 Done                    cat "$CMD_FILE"
+     13246 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 15                     *********
+Test popd on empty (should complain twice)
+*****************************************************************
+
+Input command:
+--------------
+popd
+pushd /tmp
+popd
+popd
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13253 Done                    cat "$CMD_FILE"
+     13254 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 16                     *********
+Test for exit
+*****************************************************************
+
+Input command:
+--------------
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13260 Done                    cat "$CMD_FILE"
+     13261 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 17                     *********
+Command line input size (should error but not crash)
+*****************************************************************
+
+Expects no crashes, but can error
+
+
+Error output:
+-------------
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 18                     *********
+Test really long path commands (should error but not crash)
+*****************************************************************
+
+ERROR: Segmentation violation
+Truncated output (expects /usr/bin:/bin:/tmp):
+----------------------------------------------
+MARKER not found!
+
+
+Error output:
+-------------
+./grade.sh: line 45: 13279 Done                    cat "$CMD_FILE"
+     13280 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+
+
+
+*****************************************************************
+*********                   Test 19                     *********
+Test cd to non-existing path
+*****************************************************************
+
+Input command:
+--------------
+cd /non_existing
+exit
+
+
+Output:
+-------
+sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
+./grade.sh: line 45: 13293 Done                    cat "$CMD_FILE"
+     13294 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+ERROR: Segmentation violation
+
+
+
+*****************************************************************
+*********                   Test 20                     *********
+Test for dirs depth (should not error and dirs should be clean)
+*****************************************************************
+
+ERROR: Segmentation violation
+Truncated output (expected empty):
+----------------------------------
+MARKER not found!
+
+
+Error output:
+-------------
+./grade.sh: line 45: 13301 Done                    cat "$CMD_FILE"
+     13302 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+
+
+
+*****************************************************************
+*********                   Test 21                     *********
+Test for path depth
+*****************************************************************
+
+ERROR: Segmentation violation
+Truncated output (expected /etc:/bin):
+--------------------------------------
+MARKER not found!
+MARKER not found!
+
+
+Error output:
+-------------
+./grade.sh: line 45: 15324 Broken pipe             cat "$CMD_FILE"
+     15325 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+
+
+
+*****************************************************************
+*********                   Test 22                     *********
+Test for EOF handling
+*****************************************************************
+
+ERROR: Segmentation violation
