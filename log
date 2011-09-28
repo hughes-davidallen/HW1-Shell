@@ -20,13 +20,13 @@ Running checkpatch:
 -------------------
 total: 0 errors, 0 warnings, 111 lines checked
 
-/home/w4118/students/dah2117/hmwk1/shell/list.c has no obvious style problems and is ready for submission.
+/home/w4118/students/dah2117/hmwk1//shell/list.c has no obvious style problems and is ready for submission.
 total: 0 errors, 0 warnings, 341 lines checked
 
-/home/w4118/students/dah2117/hmwk1/shell/shell.c has no obvious style problems and is ready for submission.
+/home/w4118/students/dah2117/hmwk1//shell/shell.c has no obvious style problems and is ready for submission.
 total: 0 errors, 0 warnings, 98 lines checked
 
-/home/w4118/students/dah2117/hmwk1/shell/stack.c has no obvious style problems and is ready for submission.
+/home/w4118/students/dah2117/hmwk1//shell/stack.c has no obvious style problems and is ready for submission.
 
 
 Compiling:
@@ -42,6 +42,8 @@ gcc -Wall  -c list.c
 gcc -Wall   -o w4118_sh shell.o stack.o list.o
 make: Leaving directory `/home/w4118/students/dah2117/hmwk1/shell'
 
+
+ERROR: Used getline with uninitialized pointer - fixed manually!
 
 
 *****************************************************************
@@ -59,9 +61,8 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13131 Done                    cat "$CMD_FILE"
-     13132 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+/home/w4118/hmwk1-soln/sum.sh: line 3: 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 + 16 + sum.sh: syntax error: invalid arithmetic operator (error token is ".sh")
+sh>sh>sh>sh: goodbye
 
 
 
@@ -81,9 +82,9 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13138 Done                    cat "$CMD_FILE"
-     13139 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+10
+10
+sh>sh>sh>sh>sh: goodbye
 
 
 
@@ -101,9 +102,7 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13144 Done                    cat "$CMD_FILE"
-     13146 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+sh>sh>sh: goodbye
 
 
 
@@ -122,9 +121,7 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13152 Done                    cat "$CMD_FILE"
-     13153 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+sh>sh>sh>sh: goodbye
 
 
 
@@ -146,9 +143,7 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13159 Done                    cat "$CMD_FILE"
-     13160 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+sh>sh>sh>sh>sh>sh>sh: goodbye
 
 
 
@@ -187,9 +182,8 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13196 Done                    cat "$CMD_FILE"
-     13197 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>/etc
+sh>sh: goodbye
 
 
 
@@ -209,9 +203,7 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13202 Done                    cat "$CMD_FILE"
-     13203 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+sh>sh>sh>sh>sh: goodbye
 
 
 
@@ -244,9 +236,10 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13210 Done                    cat "$CMD_FILE"
-     13211 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+sh>sh>sh>/bin:/usr/bin
+Linux
+Linux
+sh>sh>sh>sh>sh>sh>sh: goodbye
 
 
 
@@ -269,9 +262,11 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13217 Done                    cat "$CMD_FILE"
-     13218 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+error: improper usage of path
+	path [+|- /some/dir]
+/usr
+error: Directory stack is empty
+sh>sh>sh>sh>sh>sh>sh>sh: goodbye
 
 
 
@@ -307,9 +302,14 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13224 Done                    cat "$CMD_FILE"
-     13225 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+/tmp
+sh>sh>sh>sh>sh>sh>sh>/usr
+/etc
+/bin
+/tmp
+/bin
+/tmp
+sh>sh>sh>sh>sh>sh>sh: goodbye
 
 
 
@@ -328,9 +328,10 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13231 Done                    cat "$CMD_FILE"
-     13232 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+error: could not change directory
+	Directory /OOPS does not exist
+sh>sh>/home/w4118/hmwk1-soln
+sh>sh: goodbye
 
 
 
@@ -354,9 +355,11 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13238 Done                    cat "$CMD_FILE"
-     13239 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+error: could not change directory
+	Directory /home/w4118/hmwk1-soln/removed does not exist
+sh>sh>sh>sh>sh>sh>sh>/
+/home/w4118/hmwk1-soln/removed
+sh>sh: goodbye
 
 
 
@@ -382,9 +385,9 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13245 Done                    cat "$CMD_FILE"
-     13246 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+/usr/lib
+/usr/local/bin
+sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh: goodbye
 
 
 
@@ -405,9 +408,9 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13253 Done                    cat "$CMD_FILE"
-     13254 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+error: Directory stack is empty
+error: Directory stack is empty
+sh>sh>sh>sh>sh>sh: goodbye
 
 
 
@@ -424,9 +427,7 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13260 Done                    cat "$CMD_FILE"
-     13261 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+sh>sh: goodbye
 
 
 
@@ -440,7 +441,13 @@ Expects no crashes, but can error
 
 Error output:
 -------------
-ERROR: Segmentation violation
+file in any paths
+ERROR: Cannot find specified file in any paths
+ERROR: Cannot find specified file in any paths
+ERROR: Cannot find specified file in any paths
+ERROR: Cannot find specified file in any paths
+ERROR: Cannot find specified file in any paths
+ERROR: Cannot find specified file in any paths
 
 
 
@@ -449,16 +456,16 @@ ERROR: Segmentation violation
 Test really long path commands (should error but not crash)
 *****************************************************************
 
-ERROR: Segmentation violation
 Truncated output (expects /usr/bin:/bin:/tmp):
 ----------------------------------------------
-MARKER not found!
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////:/usr/bin:/bin:/tmp
+sh>sh: goodbye
 
 
 Error output:
 -------------
-./grade.sh: line 45: 13279 Done                    cat "$CMD_FILE"
-     13280 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
+mmand: ___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+error: unknown command: doesnt_exist_cmd
 
 
 
@@ -476,9 +483,9 @@ exit
 Output:
 -------
 sh: starting /home/w4118/students/dah2117/hmwk1/shell/w4118_sh
-./grade.sh: line 45: 13293 Done                    cat "$CMD_FILE"
-     13294 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
-ERROR: Segmentation violation
+error: could not change directory
+	Directory /non_existing does not exist
+sh>sh>sh: goodbye
 
 
 
@@ -487,16 +494,14 @@ ERROR: Segmentation violation
 Test for dirs depth (should not error and dirs should be clean)
 *****************************************************************
 
-ERROR: Segmentation violation
 Truncated output (expected empty):
 ----------------------------------
-MARKER not found!
+>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>/home/w4118/hmwk1-soln
+sh>sh: goodbye
 
 
 Error output:
 -------------
-./grade.sh: line 45: 13301 Done                    cat "$CMD_FILE"
-     13302 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
 
 
 
@@ -505,17 +510,16 @@ Error output:
 Test for path depth
 *****************************************************************
 
-ERROR: Segmentation violation
 Truncated output (expected /etc:/bin):
 --------------------------------------
-MARKER not found!
-MARKER not found!
+h>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>/etc:/bin
+sh>sh: goodbye
+h>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>sh>/etc:/bin
+sh>sh: goodbye
 
 
 Error output:
 -------------
-./grade.sh: line 45: 15324 Broken pipe             cat "$CMD_FILE"
-     15325 Segmentation fault      | LD_PRELOAD=$PRELOAD $SHELL
 
 
 
@@ -524,4 +528,4 @@ Error output:
 Test for EOF handling
 *****************************************************************
 
-ERROR: Segmentation violation
+ERROR: TImed out!
